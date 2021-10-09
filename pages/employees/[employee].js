@@ -7,8 +7,6 @@ export default function Employee({ employee }) {
     // const router = useRouter()
     // const { employee_query } = router.query
 
-    console.log(employee);
-
     return (
         <Container fluid className="employee-details-container">
             <h1>name: {employee.name} with {employee.tasks.length} tasks</h1>
