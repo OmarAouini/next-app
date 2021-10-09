@@ -1,15 +1,24 @@
-import { PrismaClient } from ".prisma/client";
-import { useRouter } from "next/router";
+import { PrismaClient } from ".prisma/client"
 import { Container } from "react-bootstrap";
+import Link from "next/link";
 
-export default function Employee({ tasks }) {
-    const router = useRouter()
+export default function Employee({ employee }) {
+    
+    // const router = useRouter()
+    // const { employee_query } = router.query
 
-    const { employee } = router.query
+    console.log(employee);
 
     return (
         <Container fluid className="employee-details-container">
-            <h1>name: {employee} with {tasks.length} tasks</h1>
+            <h1>name: {employee.name} with {employee.tasks.length} tasks</h1>
+            {employee.tasks.map(task => {
+                return (<div key={task.id}>
+                        <Link as={"/tasks/" + task.id} href="/tasks/[task_id]">
+                            <a>{task.title}</a>
+                        </Link>
+                    </div>)
+            })}
         </Container>
     )
 };
@@ -18,9 +27,17 @@ const prisma = new PrismaClient()
 
 export async function getServerSideProps(context) {
 
-    let tasks = await prisma.employee.findMany()
-
-    if (!tasks) {
+    //get employee with all tasks
+    let empl = await prisma.employee.findFirst({
+        where : {
+            name : context.query.employee
+        },
+         include : {
+             tasks : true
+         }
+        })
+    
+    if (!empl) {
         return {
             notFound: true
         }
@@ -28,7 +45,7 @@ export async function getServerSideProps(context) {
 
     return {
         props: {
-            tasks: tasks
+            employee: empl
         }
     }
 }
