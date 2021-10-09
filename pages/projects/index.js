@@ -1,18 +1,20 @@
 import { PrismaClient } from '.prisma/client'
 import { Container } from 'react-bootstrap'
+import TableComp from '../../components/TableComp'
 
 export default function Projects(projects) {
 
     return (
         <Container fluid className="projects-container">
             <h1>Projects</h1>
-            {projects.map(project => {
+            {[].map(project => {
                 return (
                     <div key={project.id}>
                         <h4>{project.title}</h4>
                     </div>
                 )
             })}
+        <TableComp/>
         </Container>
     )
 }
