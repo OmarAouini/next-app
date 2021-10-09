@@ -3,8 +3,9 @@ import { Container } from "react-bootstrap";
 
 export default function Task({ task }) {
   return (
-    <Container fluid className="task-container">
+    <Container fluid className="task-details-container">
       <h1>{task.title}</h1>
+      <h4>{task.content}</h4>
     </Container>
   );
 }
