@@ -1,5 +1,4 @@
 import { PrismaClient } from '.prisma/client'
-import React from 'react'
 import { Container } from 'react-bootstrap'
 
 export default function Tasks({ tasks }) {
