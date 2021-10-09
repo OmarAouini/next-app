@@ -17,8 +17,11 @@ model Task {
   content   String?
   createdAt DateTime  @default(now()) @map(name: "created_at")
   author    Employee?   @relation(fields: [employeeId], references: [id])
-  completed Boolean @default(false)
   employeeId  Int?
+  completed Boolean @default(false)
+  project       Project?   @relation(fields: [projectId], references: [id])
+  projectId     Int?
+  @@map(name: "tasks")
 }
 
 model Employee {
@@ -29,5 +32,18 @@ model Employee {
   createdAt     DateTime  @default(now()) @map(name: "created_at")
   updatedAt     DateTime  @updatedAt @map(name: "updated_at")
   tasks         Task[]
+  project       Project?   @relation(fields: [projectId], references: [id])
+  projectId     Int?
   @@map(name: "employees")
+}
+
+model Project {
+  id            Int       @default(autoincrement()) @id
+  title          String?
+  createdAt     DateTime  @default(now()) @map(name: "created_at")
+  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
+  employees     Employee[]
+  closed        Boolean
+  tasks         Task[]
+  @@map(name: "projects")
 }
