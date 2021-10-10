@@ -1,6 +1,6 @@
 import { PrismaClient } from '.prisma/client'
 import { Container } from 'react-bootstrap'
-import TableComp from '../../components/TableComp'
+import TableComp from '../../components/tableComp'
 
 export default function Projects(projects) {
 

@@ -11,6 +11,8 @@ const TopNavbar = () => {
             <span className="mx-3"><Link as="/employees" href="/employees">Employees</Link></span>
             <span className="mx-3"><Link as="/projects" href="/projects">Projects </Link></span>
             <span className="mx-3"><Link as="/tasks" href="/tasks">Tasks</Link></span>
+            </Nav>
+            <Nav className="justify-content-end">
             {true ? <span>
                 <Link as="/login" href="/login" passHref>
                     <a>

@@ -2,7 +2,7 @@ import { Table } from "react-bootstrap"
 import TableRow from "./tableRow"
 
 
-const TableComp = (props) => {
+export default function TableComp(props) {
 
     const tableheader = (keys) => {
         return (
@@ -26,5 +26,3 @@ const TableComp = (props) => {
         </Table>
     )
 }
-
-export default TableComp
