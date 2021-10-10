@@ -48,7 +48,7 @@ export default function SignupForm(props) {
             </Form.Group>
             <Form.Group>
             <Link as="/login" href="/login" passHref>
-                    <a>have an account? go to login</a>
+                <a>have an account? go to login</a>
             </Link>
             </Form.Group>
             <Button className="mt-3" variant="primary" type="submit">
