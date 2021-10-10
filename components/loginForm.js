@@ -21,6 +21,12 @@ export default function LoginForm(props) {
                 "Content-Type" : "application/json"
             },
             body: JSON.stringify(loginForm)
+        }).then(response => {
+            if (response.status === 200) {
+                return response.json()
+            }
+        }).then(data => {
+            console.log(data);
         });
     }
     

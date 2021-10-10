@@ -1,10 +1,15 @@
 import { useState } from "react";
-import { Button, Container, Form } from "react-bootstrap";
+import { Button, Container, Form, Modal } from "react-bootstrap";
 import Link from 'next/link'
 
 export default function SignupForm(props) {
 
     const [signupForm, setSignupForm] = useState({username: "", email: "", password : ""})
+    const [confirmPass, setConfirmPass] = useState("")
+    const [showError, setShowError] = useState(false)
+
+    console.log(signupForm.password);
+    console.log(confirmPass);
 
     const handlechange = (event) => {
         setSignupForm(prevState => ({
@@ -13,15 +18,27 @@ export default function SignupForm(props) {
         }))
     }
 
+    const handleConfirmPassword = (event) => {
+        setConfirmPass(event.target.value)
+    }
+
     const handleSubmit = (event) => {
         event.preventDefault();
-        fetch("/api/auth/signup", {
-            method: "POST",
-            headers: {
-                "Content-Type" : "application/json"
-            },
-            body: JSON.stringify(signupForm)
-        });
+        if (signupForm.password === confirmPass) {
+            fetch("/api/auth/signup", {
+                method: "POST",
+                headers: {
+                    "Content-Type" : "application/json"
+                },
+                body: JSON.stringify(signupForm)
+            }).then(response => {
+                if (response.status === 201) {
+                    console.log(response)
+                }
+            })
+        } else {
+            setShowError(true)
+        }
     }
     
     return (
@@ -46,6 +63,10 @@ export default function SignupForm(props) {
                 <Form.Label>Password</Form.Label>
                 <Form.Control name="password" type="password" placeholder="Password" onChange={handlechange} />
             </Form.Group>
+            <Form.Group className="mb-3">
+                <Form.Label>Confirm Password</Form.Label>
+                <Form.Control name="confirmPassword" type="password" placeholder="Confirm password" onChange={handleConfirmPassword} />
+            </Form.Group>
             <Form.Group>
             <Link as="/login" href="/login" passHref>
                 <a>have an account? go to login</a>
@@ -55,6 +76,18 @@ export default function SignupForm(props) {
                 Submit
             </Button>
             </Form>
+            
+            <Modal show={showError} onHide={() => setShowError(false)}>
+                <Modal.Header>
+                <Modal.Title>Error</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Confirm Password does not match!</Modal.Body>
+                <Modal.Footer>
+                <Button variant="secondary" onClick={() => setShowError(false)}>
+                    Close
+                </Button>
+                </Modal.Footer>
+            </Modal>
         </Container>
     )
 };
