@@ -2,12 +2,14 @@ import { sign, verify } from "jsonwebtoken"
 import { createLoginCookie, createLogoutCookie } from "./cookies"
 
 //wrapper function to protect api routes with jwt verification read from cookies
-export const authenticated = (fn) => async (req, res) => {
+export const withAuthenticated = (fn) => async (req, res) => {
     verify(req.cookies["access_token"], process.env.JWT_SECRET, async (err, decodedAccess) => {
         if(!err && decodedAccess && decodedAccess.expiresIn > new Date().getSeconds()) { // if access token duration > now, still valid
+
+            //keep going with api
             return await fn(req, res)
         }
-        if (req.cookies["access_token"].expiresIn <= 0) { //refresh token check, if zero, get new access and refresh token
+        if (decodedAccess && decodedAccess.expiresIn <= new Date().getSeconds()) { //refresh token check, if zero, get new access and refresh token
             verify(req.cookies["refresh_token"], process.env.JWT_SECRET, async (err, decodedRefresh) => {
                 if(!err && decodedRefresh && decodedRefresh.expiresIn > new Date().getSeconds()) { // still have refresh token, set new access token in response
                     //sign token 1 hour access token
@@ -18,6 +20,7 @@ export const authenticated = (fn) => async (req, res) => {
 
                     createLoginCookie(res, jwt_token, jwt_token_refresh)
 
+                    //keep going with api
                     return await fn(req, res)
                 }
             })
