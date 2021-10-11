@@ -32,7 +32,6 @@ export default async function login(req, res) {
   //check hashed password
   compare(req.body.password, user.password, function(err, result) {
     if (!err && result) {
-        
         //return claims
         const claims = {
             username: user.username,

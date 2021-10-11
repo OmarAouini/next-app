@@ -8,6 +8,6 @@ export default function logout(req, res) {
     //create logout cookies
     createLogoutCookie(res)
 
-    res.send()
+    res.status(200).send()
     
 };

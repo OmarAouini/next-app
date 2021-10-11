@@ -1,8 +1,23 @@
-import { Container, Nav, Navbar } from 'react-bootstrap'
+import { Button, Container, Nav, Navbar } from 'react-bootstrap'
 import Link from 'next/link'
 import { PersonCircle, PersonFill } from 'react-bootstrap-icons'
+import Router from 'next/router'
 
 const TopNavbar = () => {
+
+    
+    const handleLogout = async () => {
+        fetch("/api/auth/logout", {
+            method: "POST",
+        }).then(response => {
+            if (response.status === 200) {
+                Router.push("/login", "/login")
+            } 
+        }).catch(err => {
+            console.log(err);
+        })
+    }
+
     return (
         <Navbar bg="dark" variant="dark" className="p-4" sticky="top">
             <Container fluid className="navbar-inner-container text-white">
@@ -13,7 +28,7 @@ const TopNavbar = () => {
             <span className="mx-3"><Link as="/tasks" href="/tasks">Tasks</Link></span>
             </Nav>
             <Nav className="justify-content-end">
-            {true ? <span>
+            <span>
                 <Link as="/login" href="/login" passHref>
                     <a>
                     <PersonFill size={32}/>
@@ -21,16 +36,16 @@ const TopNavbar = () => {
                     </a>
                 </Link>
             </span>
-            :
+            
             <span>
-                <Link as="/logout" href="/logout" passHref>
+                <Button variant="success" onClick={() => handleLogout()} >
                     <a>
                     <PersonCircle size={32}/>
                     Logout
                     </a>
-                </Link>
+                </Button>
             </span>
-            }
+        
             </Nav>
             </Container>
         </Navbar>

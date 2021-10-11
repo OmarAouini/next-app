@@ -31,7 +31,6 @@ export default function Employees({ employees }) {
 const prisma = new PrismaClient();
 
 export async function getServerSideProps({req, res}) {
-  withAuthenticated(req, res) = (req, res) => {
 
     let employees = await prisma.employee.findMany();
 
@@ -46,7 +45,5 @@ export async function getServerSideProps({req, res}) {
         employees: employees,
       },
     };
-
-  }
   
 }
