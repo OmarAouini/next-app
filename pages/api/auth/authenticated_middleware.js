@@ -5,20 +5,19 @@ import cookies from 'cookie'
 //wrapper function to protect api routes with jwt verification read from cookies, can also wrap function inside getServerSideProps
 export const withAuthenticated = (fn) => async (req, res) => {
     console.log("into middleware auth...");
-    console.log("access cookies:");
-    console.log(req.cookies);
     verify(req.cookies["access_token"], process.env.JWT_SECRET, async (err, decodedAccess) => {
-        console.log("decoded token into verify: ");
-        console.log(decodedAccess);
+        console.log("check if access_token is still valid...");
         if(!err && decodedAccess && decodedAccess.exp > new Date().getSeconds()) { // if access token duration > now, still valid
-            console.log("access_token still valid");
+            console.log("access_token still valid, going to next step...");
             //keep going with api
             return await fn(req, res)
         }
         if (decodedAccess && decodedAccess.exp <= new Date().getSeconds()) { //refresh token check, if less than date now, get new access and refresh token
+            console.log("access_token expired, checking refresh token...");
             verify(req.cookies["refresh_token"], process.env.JWT_SECRET, async (err, decodedRefresh) => {
                 if(!err && decodedRefresh && decodedRefresh.exp > new Date().getSeconds()) { // still have refresh token, set new access token in response
-                    
+                    console.log("refresh_token still valid, generate new tokens...");
+
                     //create new tokens
 
                     //sign token 1 hour access token

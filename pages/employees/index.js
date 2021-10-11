@@ -25,13 +25,21 @@ const prisma = new PrismaClient();
 
 export async function getServerSideProps({req, res}) {
 
-    //if unhautenticated, redirect
-    if (!isAuthenticated(req)) {
-        res.setHeader("location", "/login");
-        res.statusCode = 302;
+    //TODO put in utils file
+    const sendRedirectLocation = (location) => {
+        res.writeHead(302, {
+          Location: location,
+        });
         res.end();
-        return;
-    }
+        return { props: {} }; // stop execution
+      };
+    
+     // some auth logic here
+      const isAuth = await isAuthenticated(req)
+    
+      if (!isAuth) {
+        sendRedirectLocation('/login')
+      }
 
     let employees = await prisma.employee.findMany();
 
