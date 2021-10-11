@@ -1,6 +1,7 @@
 import { PrismaClient } from ".prisma/client";
 import { hash, compare } from "bcrypt";
 import {sign} from 'jsonwebtoken'
+import { createLoginCookie } from "./cookies";
 
 export default async function login(req, res) {
   
@@ -8,6 +9,7 @@ export default async function login(req, res) {
     res.status(405).send("only POST allowed!");
   }
 
+  ///// this section is where you get the user info, needed to match the password from request
   if (!req.body) {
     res.status(400).send("error getting request body");
   }
@@ -24,6 +26,7 @@ export default async function login(req, res) {
   if (!user) {
       return res.status(404).send("user not found!")
   }
+  ///////////
 
   //check hashed password
   compare(req.body.password, user.password, function(err, result) {
@@ -35,11 +38,19 @@ export default async function login(req, res) {
             email : user.email
         }
  
-        //sign token 1 hour
-        const jwt_token = sign(claims, 'secret', {expiresIn : '1h', subject: 'user'})
+        //sign token 1 hour access token
+        const jwt_token = sign(claims, process.env.JWT_SECRET, {expiresIn : process.env.ACCESS_TOKEN_DURATION, subject: 'user_access'})
         
-        return res.status(200).json({token: jwt_token})
+        //sign token refresh 4 h
+        const jwt_token_refresh = sign(claims, process.env.JWT_SECRET, {expiresIn : process.env.REFRESH_TOKEN_DURATION, subject: 'user_refresh'})
+
+        //apply cookies with jwt
+        createLoginCookie(res, jwt_token, jwt_token_refresh)
+        
+        return res.status(200).json(user)
+
     } else {
+        console.log(err);
         return res.status(500).json("something went wrong compare hash password")
     }
   });

@@ -13,7 +13,7 @@ export default function signup(req, res) {
     const prisma = new PrismaClient()
 
     //hash password
-    hash(req.body.password, 10, async (err, hash) => {
+    hash(req.body.password, process.env.PASSWORD_HASH_SALTROUNDS, async (err, hash) => {
         //save new user with hash password
         const user_new = await prisma.user.create({
             data: {
