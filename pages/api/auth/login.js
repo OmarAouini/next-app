@@ -9,10 +9,11 @@ export default async function login(req, res) {
     res.status(405).send("only POST allowed!");
   }
 
-  ///// this section is where you get the user info, needed to match the password from request
   if (!req.body) {
     res.status(400).send("error getting request body");
   }
+
+  //////////////////////// this section is where you get the user info, needed to match the password from request
 
   const prisma = new PrismaClient();
 
@@ -26,7 +27,7 @@ export default async function login(req, res) {
   if (!user) {
       return res.status(404).send("user not found!")
   }
-  ///////////
+  ////////////////////////
 
   //check hashed password
   compare(req.body.password, user.password, function(err, result) {
