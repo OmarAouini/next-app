@@ -12,14 +12,14 @@ export const createLoginCookie = (res, accessToken, refreshToken) => {
             cookie.serialize("access_token", accessToken, {
             maxAge: accessTokenMaxAge, // cookie has same duration of token
             secure: process.env.NODE_ENV !== "dev",
-            httpOnly: true,
+            httpOnly: process.env.NODE_ENV !== "dev",
             sameSite : "strict",
             path: "/"
         }),
         cookie.serialize("refresh_token", refreshToken, {
             maxAge: refreshTokenMaxAge, // cookie has same duration of token
             secure: process.env.NODE_ENV !== "dev",
-            httpOnly: true,
+            httpOnly: process.env.NODE_ENV !== "dev",
             sameSite : "strict",
             path: "/"
         })

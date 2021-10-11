@@ -39,10 +39,10 @@ export default async function login(req, res) {
         }
  
         //sign token 1 hour access token
-        const jwt_token = sign(claims, process.env.JWT_SECRET, {expiresIn : process.env.ACCESS_TOKEN_DURATION, subject: 'user_access'})
+        const jwt_token = sign(claims, process.env.JWT_SECRET, {expiresIn : parseInt(process.env.ACCESS_TOKEN_DURATION), subject: 'user_access'})
         
         //sign token refresh 4 h
-        const jwt_token_refresh = sign(claims, process.env.JWT_SECRET, {expiresIn : process.env.REFRESH_TOKEN_DURATION, subject: 'user_refresh'})
+        const jwt_token_refresh = sign(claims, process.env.JWT_SECRET, {expiresIn : parseInt(process.env.REFRESH_TOKEN_DURATION), subject: 'user_refresh'})
 
         //apply cookies with jwt
         createLoginCookie(res, jwt_token, jwt_token_refresh)
