@@ -30,18 +30,23 @@ export default function Employees({ employees }) {
 
 const prisma = new PrismaClient();
 
-export async function getServerSideProps(context) {
-  let employees = await prisma.employee.findMany();
+export async function getServerSideProps({req, res}) {
+  withAuthenticated(req, res) = (req, res) => {
 
-  if (!employees) {
+    let employees = await prisma.employee.findMany();
+
+    if (!employees) {
+      return {
+        notFound: true,
+      };
+    }
+
     return {
-      notFound: true,
+      props: {
+        employees: employees,
+      },
     };
-  }
 
-  return {
-    props: {
-      employees: employees,
-    },
-  };
+  }
+  
 }

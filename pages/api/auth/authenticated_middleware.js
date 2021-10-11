@@ -9,7 +9,7 @@ export const withAuthenticated = (fn) => async (req, res) => {
             //keep going with api
             return await fn(req, res)
         }
-        if (decodedAccess && decodedAccess.expiresIn <= new Date().getSeconds()) { //refresh token check, if zero, get new access and refresh token
+        if (decodedAccess && decodedAccess.expiresIn <= new Date().getSeconds()) { //refresh token check, if less than date now, get new access and refresh token
             verify(req.cookies["refresh_token"], process.env.JWT_SECRET, async (err, decodedRefresh) => {
                 if(!err && decodedRefresh && decodedRefresh.expiresIn > new Date().getSeconds()) { // still have refresh token, set new access token in response
                     
