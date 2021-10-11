@@ -1,7 +1,7 @@
 import { sign, verify } from "jsonwebtoken"
 import { createLoginCookie, createLogoutCookie } from "./cookies"
 
-//wrapper function to protect api routes with jwt verification read from cookies
+//wrapper function to protect api routes with jwt verification read from cookies, can also wrap function inside getServerSideProps
 export const withAuthenticated = (fn) => async (req, res) => {
     verify(req.cookies["access_token"], process.env.JWT_SECRET, async (err, decodedAccess) => {
         if(!err && decodedAccess && decodedAccess.expiresIn > new Date().getSeconds()) { // if access token duration > now, still valid
