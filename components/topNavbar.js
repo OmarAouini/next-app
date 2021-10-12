@@ -2,9 +2,11 @@ import { Button, Container, Nav, Navbar } from 'react-bootstrap'
 import Link from 'next/link'
 import { PersonCircle, PersonFill } from 'react-bootstrap-icons'
 import Router from 'next/router'
+import { useEffect, useState } from 'react'
 
 const TopNavbar = () => {
 
+    const [user, setUser] = useState(null)
     
     const handleLogout = async () => {
         fetch("/api/auth/logout", {
@@ -17,6 +19,32 @@ const TopNavbar = () => {
             console.log(err);
         })
     }
+
+    const getUser = async () => {
+        fetch("/api/auth/user", {
+            method: "POST",
+        }).then(response => {
+            if (response.status === 200) {
+                console.log("ok");
+            } 
+        })
+        .then(user => {
+            console.log(user);
+        })
+        .then(user_json => {
+            setUser(user_json)
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    } 
+
+    //on mount
+    useEffect(() => {
+        getUser()
+        console.log(user);
+    }, [])
+
 
     return (
         <Navbar bg="dark" variant="dark" className="p-4" sticky="top">

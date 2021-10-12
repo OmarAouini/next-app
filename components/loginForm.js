@@ -26,7 +26,7 @@ export default function LoginForm(props) {
                 return response.json()
             }
         }).then(data => {
-            console.log("logged out");
+            console.log("logged in");
         });
     }
     
