@@ -1,5 +1,6 @@
 import { PrismaClient } from '.prisma/client'
 import { Container } from 'react-bootstrap'
+import { prisma } from '../api/lib/prisma'
 
 export default function Tasks({ tasks }) {
 
@@ -16,8 +17,6 @@ export default function Tasks({ tasks }) {
         </Container>
     )
 }
-
-const prisma = new PrismaClient()
 
 export async function getServerSideProps(context) {
 

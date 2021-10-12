@@ -1,6 +1,6 @@
-import { PrismaClient } from ".prisma/client";
 import { hash, compare } from "bcrypt";
 import {sign} from 'jsonwebtoken'
+import { prisma } from "../lib/prisma";
 import { createLoginCookie } from "./cookies";
 
 export default async function login(req, res) {
@@ -15,7 +15,6 @@ export default async function login(req, res) {
 
   //////////////////////// this section is where you get the user info, needed to match the password from request
 
-  const prisma = new PrismaClient();
 
   //getting user
   const user = await prisma.user.findUnique({

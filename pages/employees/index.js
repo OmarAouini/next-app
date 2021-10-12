@@ -1,7 +1,8 @@
 import { PrismaClient } from ".prisma/client";
 import Link from "next/link";
 import { Container } from "react-bootstrap";
-import { isAuthenticated, withAuthenticated } from "../api/auth/authenticated_middleware";
+import { redirectIfUnauthenticated } from "../api/auth/redirect_if_unauthenticated";
+import {prisma} from '../api/lib/prisma'
 
 export default function Employees({ employees }) {
 
@@ -21,38 +22,24 @@ export default function Employees({ employees }) {
   );
 }
 
-const prisma = new PrismaClient();
-
 export async function getServerSideProps({req, res}) {
 
-    //TODO put in utils file
-    const sendRedirectLocation = (location) => {
-        res.writeHead(302, {
-          Location: location,
-        });
-        res.end();
-        return { props: {} }; // stop execution
-      };
-    
-     // some auth logic here
-      const isAuth = await isAuthenticated(req)
-    
-      if (!isAuth) {
-        sendRedirectLocation('/login')
-      }
+  // check if unhanutenticated first
+  redirectIfUnauthenticated(req, res)
 
-    let employees = await prisma.employee.findMany();
+    const employees = await prisma.employee.findMany();
 
     if (!employees) {
       return {
-        notFound: true,
-      };
+        notFound : true
+      }
     }
-
+  
     return {
       props: {
         employees: employees,
       },
     };
+
   
-}
+};

@@ -1,6 +1,7 @@
 import { PrismaClient } from '.prisma/client'
 import { Container } from 'react-bootstrap'
 import TableComp from '../../components/tableComp'
+import { prisma } from '../api/lib/prisma'
 
 export default function Projects(projects) {
 
@@ -18,8 +19,6 @@ export default function Projects(projects) {
         </Container>
     )
 }
-
-const prisma = new PrismaClient()
 
 export async function getServerSideProps(context) {
 

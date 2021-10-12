@@ -38,13 +38,7 @@ export const withAuthenticated = (fn) => async (req, res) => {
             console.log("error:");
             console.log(err.message);
         }
-        // does not have refresh or access token, logout unhautorized
+        // does not have refresh or access token, logout, unhautorized
         createLogoutCookie(res)
-        res.status(403).json({message: "unhautenticated"})
     })
-}
-
-
-export const isAuthenticated = (req) => {
-    return true
 }
